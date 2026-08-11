@@ -19,17 +19,25 @@ incoming tide pushes the camera forward until a seagull takes you.
 
 ## Hosting
 
-Currently hosted as a Claude Artifact:
-https://claude.ai/code/artifact/e82f982b-911c-45a9-9544-784ef94a604b
+Live at **https://lamzf1998.github.io/soysoysoy-8k2vqp/**
 
-Artifacts are **private by default** — use the Share menu on that page before
-sending the link to anyone.
+Served by GitHub Pages from the `main` branch of `lamzf1998/soysoysoy-8k2vqp`.
+The repo name is deliberately unguessable, and `robots.txt` plus a `noindex` meta
+tag ask search engines to stay away — but the URL is still technically public,
+so treat it as "anyone with the link".
 
-Because it's a single static file, it also drops straight onto any static host:
+To update the live site: edit `index.html`, then
+
+```
+git add -A && git commit -m "..." && git push
+```
+
+Pages rebuilds in a minute or two.
+
+Because it's a single static file, it also drops onto any other static host:
 
 | Option | How |
 | --- | --- |
-| GitHub Pages | Push this folder to a repo, Settings → Pages → deploy from branch |
 | Netlify / Vercel | Drag the folder onto the dashboard |
 | itch.io | Zip `index.html`, upload as an HTML project, tick "This file will be played in the browser" |
 | Local network | `python -m http.server 8000` in this folder |

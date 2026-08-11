@@ -26,6 +26,20 @@ Hazards: cars flatten you, open water drowns you (ride the driftwood and surfboa
 the tram is fast and only warns you with blinking lights, and if you dawdle the
 incoming tide pushes the camera forward until a seagull takes you.
 
+## Skipping ahead while testing
+
+A dashed **Skip stage ▸** button sits in the bottom-right corner. Each press jumps
+one stage forward: the crossing → the convention → the envelope → the invitation.
+It's on by default.
+
+To hide it in the version you actually send, append `?dev=0` to the link:
+
+```
+https://lamzf1998.github.io/soysoysoy-8k2vqp/?dev=0
+```
+
+No rebuild needed — the same page serves both.
+
 ## Hosting
 
 Live at **https://lamzf1998.github.io/soysoysoy-8k2vqp/**

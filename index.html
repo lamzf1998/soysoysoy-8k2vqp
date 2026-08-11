@@ -269,6 +269,16 @@
   }
   .inv-again:active{transform:translateY(2px); box-shadow:0 1px 0 #3C2517}
 
+  /* ---- testing shortcut ---- */
+  #skip{
+    position:absolute; right:10px; bottom:10px; z-index:20; display:none;
+    cursor:pointer; font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    background:rgba(10,20,26,.72); color:#8FE3C2; border:1px dashed rgba(143,227,194,.55);
+    padding:7px 11px; border-radius:8px; backdrop-filter:blur(3px);
+  }
+  #skip.on{display:block}
+  #skip:hover{background:rgba(143,227,194,.2); color:#D7FFF0}
+
   /* ---- touch pad ---- */
   #pad{position:absolute; inset:auto 0 0 0; display:none; padding:12px; gap:8px;
        grid-template-columns:repeat(3,1fr); justify-items:center; pointer-events:none}
@@ -286,7 +296,7 @@
   <div id="stage">
     <canvas id="c"></canvas>
     <div id="hud">
-      <div class="chip">ROW <b id="lvl">0/50</b></div>
+      <div class="chip">ROW <b id="lvl">0/40</b></div>
       <div id="progWrap"><div id="prog"></div></div>
       <div class="chip">BEST <b id="best">0</b></div>
       <button id="mute" aria-label="Toggle sound">SND</button>
@@ -300,6 +310,8 @@
     <div id="overlay" class="show">
       <div class="board" id="board"></div>
     </div>
+
+    <button id="skip" title="Testing: jump to the next stage">Skip stage ▸</button>
 
     <div id="hall">
       <div id="hallBg"></div>
@@ -449,7 +461,9 @@
 // ───────────────────────────────── config
 const COLS = 13;
 const HOP_MS = 115;
-const GOAL = 50;                 // rows to the finish banner
+const GOAL = 40;                 // rows to the finish banner
+// Testing shortcut. On by default; add ?dev=0 to the URL to hide it in the version you send.
+const DEV = new URLSearchParams(location.search).get("dev") !== "0";
 
 const C = {
   sand:"#E8D5A9", sand2:"#DFC99B", sandDk:"#C9AE78", sandLine:"#D2B983",
@@ -1015,6 +1029,25 @@ function hallToEnvelope(){
   showFinale();
 }
 addEventListener("resize", () => { if (sol) fitCards(); });
+
+// ── testing shortcut: advance whatever stage you're on
+const skipBtn = document.getElementById("skip");
+if (DEV) skipBtn.classList.add("on");
+skipBtn.addEventListener("click", () => {
+  if (finale.classList.contains("show")){          // envelope → invitation
+    if (invite.hidden){ envWrap.style.display = "none"; invite.hidden = false; }
+    return;
+  }
+  if (hallEl.classList.contains("show")){          // solitaire → envelope
+    if (sol) sol.done = true;
+    hallToEnvelope(); return;
+  }
+  if (state === "title" || state === "dead") primary();   // crossing → convention
+  hideBoard();
+  state = "ending"; endT = 9; endStep = 4;
+  P.row = goal + 3; P.hop = null; P.dead = false;
+  openHall();
+});
 
 // ───────────────────────────────── update
 function span(it, off){ return [it.x + off - 4, it.x + off - 4 + it.len]; }

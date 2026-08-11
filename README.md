@@ -1,6 +1,6 @@
 # SOYSOYSOY — a crab's crossing
 
-A Crossy Road–style game starring Soy the crab. Cross 30 rows of beach highway,
+A Crossy Road–style game starring Soy the crab. Cross 50 rows of beach highway,
 tidal channels and a boardwalk tram line to reach the finish banner — then Soy
 dives into a river of soy sauce and an envelope floats up with an invitation inside.
 

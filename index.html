@@ -198,7 +198,7 @@
   <div id="stage">
     <canvas id="c"></canvas>
     <div id="hud">
-      <div class="chip">ROW <b id="lvl">0/30</b></div>
+      <div class="chip">ROW <b id="lvl">0/50</b></div>
       <div id="progWrap"><div id="prog"></div></div>
       <div class="chip">BEST <b id="best">0</b></div>
       <button id="mute" aria-label="Toggle sound">SND</button>
@@ -320,7 +320,7 @@
 // ───────────────────────────────── config
 const COLS = 13;
 const HOP_MS = 115;
-const GOAL = 30;                 // rows to the finish banner
+const GOAL = 50;                 // rows to the finish banner
 
 const C = {
   sand:"#E8D5A9", sand2:"#DFC99B", sandDk:"#C9AE78", sandLine:"#D2B983",
@@ -685,7 +685,7 @@ function update(dt){
 
   // camera + tide pressure
   if (state === "playing"){
-    scrollSpeed = Math.min(.40 + elapsed * .012, 1.05);   // tide creeps in faster the longer you dawdle
+    scrollSpeed = Math.min(.36 + elapsed * .008, .85);    // tide creeps in faster the longer you dawdle
     camMin += scrollSpeed * dt;
     const follow = P.row - (H / T) * .34;
     camY += (Math.max(follow, camMin) - camY) * Math.min(1, dt * 6.5);

@@ -1,8 +1,17 @@
 # SOYSOYSOY — a crab's crossing
 
 A Crossy Road–style game starring Soy the crab. Cross 50 rows of beach highway,
-tidal channels and a boardwalk tram line to reach the finish banner — then Soy
-dives into a river of soy sauce and an envelope floats up with an invitation inside.
+tidal channels and a boardwalk tram line to reach the finish banner. Past it, a
+red carpet leads into a game convention where Olaf deals a hand of solitaire —
+win it and an envelope floats up with an invitation inside.
+
+## The three acts
+
+1. **The crossing** — 50 rows of traffic, water and trams, with the tide pushing behind you
+2. **The convention** — Klondike solitaire, medium difficulty: draw one, unlimited
+   redeals, dealt by a snowman who comments on everything. If a deal turns sour,
+   "New deal" reshuffles, and after a while Olaf offers to just hand the envelope over
+3. **The invitation** — the envelope, and what's inside it
 
 ## Playing
 

@@ -5,13 +5,38 @@ tidal channels and a boardwalk tram line to reach the finish banner. Past it, a
 red carpet leads into a game convention where Olaf deals a hand of solitaire —
 win it and an envelope floats up with an invitation inside.
 
-## The three acts
+## The five acts
 
-1. **The crossing** — 50 rows of traffic, water and trams, with the tide pushing behind you
-2. **The convention** — Klondike solitaire, medium difficulty: draw one, unlimited
-   redeals, dealt by a snowman who comments on everything. If a deal turns sour,
-   "New deal" reshuffles, and after a while Olaf offers to just hand the envelope over
-3. **The invitation** — the envelope, and what's inside it
+1. **The crossing** — 40 rows of traffic, water and trams, with the tide pushing behind you
+2. **The convention** — Klondike solitaire, medium: draw one, unlimited redeals, dealt by
+   a snowman who comments on everything. "New deal" reshuffles a cold hand, and after a
+   while Olaf offers to wave you through
+3. **The quiz** — five questions on a game-show stage, hosted by a sea otter.
+   **A wrong answer sends you back to the solitaire tables** and restarts the quiz
+4. **Wend** — the final round (see below)
+5. **The invitation** — the envelope, and what's inside it
+
+## The Wend grid
+
+Wend's rule is that every letter in the grid is used exactly once, so the words have to
+tile the board perfectly. Seven words — HAPPY, ANNIVERSARY, BABY, SOY, SAUCE, CRAB, TIME —
+come to exactly 36 letters, which is exactly a 6×6 board:
+
+```
+E  A  I  Y  P  H
+N  M  T  Y  A  P
+V  N  R  E  S  U
+I  E  S  A  C  A
+B  R  Y  C  R  B
+Y  A  B  O  S  A
+```
+
+Every word snakes (no straight-line freebies). Drag across neighbouring letters —
+diagonals count — to spell one. **Clear** drops the current selection; **Hint** lights up
+the first letter of a word you haven't found.
+
+The layout came from `scratchpad/wend2.py`: a backtracking search that tiles the grid,
+run a few hundred times with randomised ordering, keeping whichever solution bends the most.
 
 ## Playing
 

@@ -23,20 +23,23 @@ tile the board perfectly. Seven words — HAPPY, ANNIVERSARY, BABY, SOY, SAUCE, 
 come to exactly 36 letters, which is exactly a 6×6 board:
 
 ```
-E  A  I  Y  P  H
-N  M  T  Y  A  P
-V  N  R  E  S  U
-I  E  S  A  C  A
-B  R  Y  C  R  B
-Y  A  B  O  S  A
+M  E  C  R  S  O
+I  T  Y  A  B  Y
+P  A  R  A  E  V
+P  H  E  S  R  I
+Y  U  C  B  Y  N
+S  A  B  A  A  N
 ```
 
-Every word snakes (no straight-line freebies). Drag across neighbouring letters —
-diagonals count — to spell one. **Clear** drops the current selection; **Hint** lights up
-the first letter of a word you haven't found.
+Drag up, down, left or right across neighbouring letters — **no diagonals** — to spell a
+word. Every word snakes, so there are no straight-line freebies. **Clear** drops the
+current selection; **Hint** lights up the first letter of a word you haven't found.
 
-The layout came from `scratchpad/wend2.py`: a backtracking search that tiles the grid,
-run a few hundred times with randomised ordering, keeping whichever solution bends the most.
+`wend-solver.py` produced this layout. It backtracks to tile the grid, runs a few thousand
+times with randomised ordering, and keeps the wiggliest result that also passes an
+**unambiguity check**: every word must have exactly one possible path through the grid.
+Without that check some grids let you spell, say, ANNIVERSARY along a second route, consume
+letters another word needed, and strand the board with no way back.
 
 ## Playing
 

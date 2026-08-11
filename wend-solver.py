@@ -12,16 +12,18 @@ WORDS = ["ANNIVERSARY", "HAPPY", "SAUCE", "CRAB", "BABY", "TIME", "SOY"]
 N = W * H
 assert sum(len(x) for x in WORDS) == N, sum(len(x) for x in WORDS)
 
+ORTHOGONAL_ONLY = True          # no diagonal steps
+STEPS = [(1, 0), (-1, 0), (0, 1), (0, -1)] if ORTHOGONAL_ONLY else [
+    (dx, dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx or dy]
+
 NB = []
 for i in range(N):
     x, y = i % W, i // W
     n = []
-    for dx in (-1, 0, 1):
-        for dy in (-1, 0, 1):
-            if dx or dy:
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < W and 0 <= ny < H:
-                    n.append(ny * W + nx)
+    for dx, dy in STEPS:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < W and 0 <= ny < H:
+            n.append(ny * W + nx)
     NB.append(n)
 
 
@@ -124,15 +126,52 @@ def wiggle(paths):
     return score
 
 
+def placements(grid, word):
+    """Every path through `grid` that spells `word`."""
+    out = []
+
+    def go(i, cell, used):
+        if grid[cell] != word[i]:
+            return
+        used = used | {cell}
+        if i + 1 == len(word):
+            out.append(used)
+            return
+        for m in NB[cell]:
+            if m not in used:
+                go(i + 1, m, used)
+
+    for s in range(N):
+        go(0, s, set())
+    return out
+
+
+def unambiguous(grid):
+    """A word with two possible placements lets a player strand the board."""
+    for w in WORDS:
+        if len(placements(grid, w)) != 1:
+            return False
+    return True
+
+
 rng = random.Random(20260817)
 best = None
-for attempt in range(600):
+tried = kept = 0
+for attempt in range(4000):
     got = solve(rng)
     if not got:
         continue
+    tried += 1
+    if not unambiguous(got[0]):
+        continue
+    kept += 1
     s = wiggle(got[1])
     if best is None or s > best[0]:
         best = (s, got[0][:], [list(p) for p in got[1]])
+
+print("solutions %d, unambiguous %d" % (tried, kept))
+if best is None:
+    raise SystemExit("no unambiguous grid found")
 
 score, grid, paths = best
 print("wiggle score", score)

@@ -454,7 +454,7 @@
       <div class="stage"></div><div class="curtain"></div>
       <div class="stage-in">
         <p class="show-title">Final Round · Wend</p>
-        <p class="show-step">Every letter belongs to exactly one word</p>
+        <p class="show-step">Every letter belongs to exactly one word · no diagonals</p>
         <div class="host">
           <img id="wendHost" src="" alt="Oshawott, the quiz host">
           <div class="bubble" id="wendSay">Seven words are hiding in here.</div>
@@ -1292,16 +1292,17 @@ const wendGrid = document.getElementById("wendGrid");
 const wendLines = document.getElementById("wendLines");
 const wendWords = document.getElementById("wendWords");
 const wendSay = document.getElementById("wendSay");
-const WGRID = "EAIYPHNMTYAPVNRESUIESACABRYCRBYABOSA";
+const WGRID = "MECRSOITYABYPARAEVPHESRIYUCBYNSABAAN";
 const WCOLS = 6;
 const WWORDS = ["HAPPY","ANNIVERSARY","BABY","SOY","SAUCE","CRAB","TIME"];
-const WSTART = { HAPPY:5, ANNIVERSARY:1, BABY:32, SOY:34, SAUCE:16, CRAB:27, TIME:8 };
+const WSTART = { HAPPY:19, ANNIVERSARY:34, BABY:32, SOY:4, SAUCE:30, CRAB:2, TIME:7 };
 
 let wOwner = [], wFound = [], wSel = [], wDrag = false, wHint = -1;
 
+// steps go up, down, left and right only — no diagonals
 function wAdj(a, b){
   const ax = a % WCOLS, ay = (a / WCOLS) | 0, bx = b % WCOLS, by = (b / WCOLS) | 0;
-  return a !== b && Math.abs(ax - bx) <= 1 && Math.abs(ay - by) <= 1;
+  return Math.abs(ax - bx) + Math.abs(ay - by) === 1;
 }
 function wCentre(i){ return [(i % WCOLS) * 100 + 50, ((i / WCOLS) | 0) * 100 + 50]; }
 
@@ -1402,7 +1403,7 @@ function openWend(){
   quizEl.classList.remove("show"); hallEl.classList.remove("show");
   wendEl.classList.add("show"); hudEl.style.display = "none";
   buildWend();
-  wendSay.textContent = "Seven words are hiding in here, and every single letter belongs to one of them. Drag to spell.";
+  wendSay.textContent = "Seven words are hiding in here, and every single letter belongs to one of them. Drag up, down, left and right to spell — no diagonals!";
 }
 
 // ── testing shortcut: advance whatever stage you're on

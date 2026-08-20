@@ -1,12 +1,13 @@
 # SOYSOYSOY — a crab's crossing
 
-A Crossy Road–style game starring Soy the crab. Cross 50 rows of beach highway,
+A Crossy Road–style game starring Soy the crab. Cross 40 rows of beach highway,
 tidal channels and a boardwalk tram line to reach the finish banner. Past it, a
 red carpet leads to a locked convention door, and past that a game convention where
-Olaf deals a hand of solitaire — win it and an envelope floats up with an invitation
-inside.
+Olaf deals a hand of solitaire. Past *that* there's a quiz, a word grid, and finally
+the man who made the thing, wanting best of five — beat him and an envelope floats up
+with an invitation inside.
 
-## The six acts
+## The seven acts
 
 1. **The crossing** — 40 rows of traffic, water and trams, with the tide pushing behind you
 2. **The four-colour lock** — Mastermind on the convention door, refereed by a Psyduck
@@ -17,8 +18,10 @@ inside.
    and after a while Olaf offers to wave you through
 4. **The quiz** — five questions on a game-show stage, hosted by a sea otter.
    **A wrong answer sends you back to the solitaire tables** and restarts the quiz
-5. **Wend** — the final round (see below)
-6. **The invitation** — the envelope, and what's inside it
+5. **Wend** — the word grid (see below)
+6. **Rock, paper, scissors** — best of five against ZF, who is not a good loser
+   (see below)
+7. **The invitation** — the envelope, and what's inside it
 
 ## Solitaire you can't get stuck on
 
@@ -92,6 +95,32 @@ offers to just tell you the code.
 Twenty rows would otherwise push the pegs off a phone screen, so the history scrolls inside
 its own pane and follows the newest guess down.
 
+## Best of five
+
+The last thing between you and the envelope is a straight game of rock, paper, scissors,
+first to three, ties thrown again. He throws honestly — a flat third each way, no reading
+what you picked and no quietly letting you through. The round is short enough that fair
+dice are the whole point.
+
+Losing it isn't possible, which is the promise the lock and the solitaire make too. Take
+three off him and he hands the evening over. Let him take three off you and he gloats,
+resets the board to nothing, and a **Call it a draw** button appears on the table that
+wasn't there before — from that point on there are two ways out and only one of them
+needs you to win.
+
+He has four faces, and they're photographs rather than drawings: the helmet one between
+throws, sunglasses when he takes a point, a finger up his nose when he drops one, and the
+grin with the flower dome for the moment he concedes. `zf-heads.py` cuts them (see the
+notes at the bottom). They were cropped to a common height but not a common width — the
+one with his hand in shot is half as wide as the rest — so the frame in the stage is a
+fixed box with the photo fitted inside it, or the speech bubble would jump sideways every
+time his expression changed.
+
+The hands are drawn, not photographed: a fist, a flat hand and two fingers, each built
+from rounded rectangles stacked into a pile and drawn twice — once fat and dark for the
+outline, once in skin on top — so palm, fingers and thumb merge into a single silhouette
+with no seams showing where they overlap.
+
 ## The Wend grid
 
 Wend's rule is that every letter in the grid is used exactly once, so the words have to
@@ -126,6 +155,7 @@ photo is embedded as a data URI). Just double-click it, or open it in any browse
 - **The lock**: tap a colour to drop it in the next hole, tap a placed peg to take it out,
   then **Guess**. On a keyboard, `1`–`5` place a colour, `Backspace` takes one back and
   `Enter` guesses
+- **Rock, paper, scissors**: tap a hand, or press `1`, `2`, `3`
 - **Move**: arrow keys or WASD
 - **Touch**: swipe in any direction, tap to hop forward, or use the on-screen D-pad
 - Sound can be toggled with the `SND` button
@@ -138,7 +168,7 @@ incoming tide pushes the camera forward until a seagull takes you.
 
 A dashed **Skip stage ▸** button sits in the bottom-right corner. Each press jumps
 one stage forward: the crossing → the lock → the convention → the quiz → Wend →
-the envelope → the invitation. It's on by default.
+rock, paper, scissors → the envelope → the invitation. It's on by default.
 
 To hide it in the version you actually send, append `?dev=0` to the link:
 
@@ -182,6 +212,12 @@ Because it's a single static file, it also drops onto any other static host:
   flood fill is safe here because both characters' own white areas (eyes, beak) sit inside
   a dark outline, so the fill can't leak into them. The results are then inlined into
   `index.html` as base64 data URIs, which is why there's no build step
+- ZF's four faces are ordinary snapshots with no flat background to flood-fill, so
+  `zf-heads.py` runs rembg (`u2net_human_seg`) over each one instead, crops to a
+  hand-picked head box, drops any leftover island the head isn't touching, and rubs out
+  by hand the few things that survive both — in the last photo a cushion reads as person
+  to the matting *and* touches his hair, so it takes a staircase of rectangles to clear
+  it without shaving the hair or the earring
 - Rendered on a single 2D canvas, DPI-aware, resizes to any viewport
 - Sound is synthesised with the Web Audio API — no audio assets
 - Includes a `roundRect` polyfill for iOS Safari below version 16

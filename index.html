@@ -2015,6 +2015,7 @@ const PSYSAY = {
 
 let mCode = [], mHist = [], mGuess = [], mPin = [];
 let mHints = 0, mLock = false, mFace = "play", mGiveT = 0;
+let mDrawn = 0;                  // history rows already on screen
 
 // no more than a pair of any one colour: triples are miserable to reason about
 function mNewCode(){
@@ -2053,32 +2054,49 @@ function mSay(t){
 }
 const mPegHTML = pi => '<i class="peg" style="--pc:' + PEGS[pi].c + '">' + PEGS[pi].g + '</i>';
 
-function renderMind(){
-  let h = "";
-  mHist.forEach((r, i) => {
-    let pegs = "", reds = "", whites = "";
-    r.g.forEach(pi => { pegs += mPegHTML(pi); });
-    // only the dots actually earned -- an empty placeholder on one edge would read
-    // as a count of its own now that the two colours are split apart
-    for (let k = 0; k < r.s.black; k++) reds += '<i class="hit"></i>';
-    for (let k = 0; k < r.s.white; k++) whites += '<i class="near"></i>';
-    h += '<div class="mrow' + (r.s.black === MLEN ? " win" : "") + '"><span class="n">' + (i + 1) +
+// one finished guess, as a row of the history list
+function mRowHTML(r, i){
+  let pegs = "", reds = "", whites = "";
+  r.g.forEach(pi => { pegs += mPegHTML(pi); });
+  // only the dots actually earned -- an empty placeholder on one edge would read
+  // as a count of its own now that the two colours are split apart
+  for (let k = 0; k < r.s.black; k++) reds += '<i class="hit"></i>';
+  for (let k = 0; k < r.s.white; k++) whites += '<i class="near"></i>';
+  return '<div class="mrow' + (r.s.black === MLEN ? " win" : "") + '"><span class="n">' + (i + 1) +
          '</span><span class="fbs hits">' + reds + '</span><span class="pegs">' + pegs +
          '</span><span class="fbs nears">' + whites + '</span></div>';
-  });
-  mindRows.innerHTML = h;
-  mindRows.scrollTop = mindRows.scrollHeight;      // keep the newest guess in view
+}
+
+function renderMind(){
+  // the history only grows, so append what's new instead of rewriting the list:
+  // a full innerHTML rebuild replayed every row's pop-in on every colour tap,
+  // which flashed the whole block each time you picked a peg
+  if (mHist.length < mDrawn){ mindRows.innerHTML = ""; mDrawn = 0; }
+  if (mHist.length > mDrawn){
+    let h = "";
+    for (let i = mDrawn; i < mHist.length; i++) h += mRowHTML(mHist[i], i);
+    mindRows.insertAdjacentHTML("beforeend", h);
+    mDrawn = mHist.length;
+    mindRows.scrollTop = mindRows.scrollHeight;    // keep the newest guess in view
+  }
 
   const nextEmpty = mGuess.indexOf(null);
-  let s = "";
-  for (let i = 0; i < MLEN; i++){
-    const pi = mGuess[i], pinned = mPin[i] != null;
-    s += '<i class="mslot' + (pi != null ? " on" : "") + (pinned ? " pin" : "") +
-         (!pinned && i === nextEmpty ? " next" : "") + '" data-i="' + i + '"' +
-         (pi != null ? ' style="--pc:' + PEGS[pi].c + '"' : "") + '>' +
-         (pi != null ? PEGS[pi].g : "") + "</i>";
+  // same reason: the four holes are updated in place, so the amber "you're here"
+  // pulse doesn't restart from scratch whenever another hole gets filled
+  if (mindSlots.children.length !== MLEN){
+    let s = "";
+    for (let i = 0; i < MLEN; i++) s += '<i class="mslot" data-i="' + i + '"></i>';
+    mindSlots.innerHTML = s;
   }
-  mindSlots.innerHTML = s;
+  for (let i = 0; i < MLEN; i++){
+    const pi = mGuess[i], pinned = mPin[i] != null, el = mindSlots.children[i];
+    const cls = "mslot" + (pi != null ? " on" : "") + (pinned ? " pin" : "") +
+                (!pinned && i === nextEmpty ? " next" : "");
+    if (el.className !== cls) el.className = cls;          // reassigning restarts the pulse
+    el.style.setProperty("--pc", pi != null ? PEGS[pi].c : "");
+    const g = pi != null ? PEGS[pi].g : "";
+    if (el.textContent !== g) el.textContent = g;
+  }
 
   const used = mHist.length, t = mTier(used);
   mindStep.textContent = "Guess " + Math.min(used + 1, MTRIES) + " of " + MTRIES;
